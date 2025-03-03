@@ -37,23 +37,31 @@ class Main {
     constructor() {
         this.employees = [
             new Manager("Shawn", 45, 25),
-            new PartTime("Maggy", 22, 20, 12),
-            new PartTime("Tom", 42, 5)
+            new PartTime("Breece", 22, 20, 12),
+            new PartTime("Float", 20, 42, 5)
         ];
         this.showMenu();
+        this.displayEmployees();
     }
 
     //Choice Menu for User
     showMenu() {
-        while (true){
-            let choice = prompt("Main Menu \n 1. Add Employee\n2. Remove Employee\n3. Edit Employee\n4. Display Employees \n \nEnter Selection:");
-            if (choice === "1" || choice === "2" || choice === "3" || choice === "4"){
-                this.handleChoice(choice);
-            } else if (choice !== "1" && choice !== "2" && choice !== "3" && choice !== "4"){
-                alert("Please select the options presented to you.");
-            }
+        
+
+        // I tried adding console.clear() and taking it out but no matter what it would not show up in the console. It would just appear randomly but once console.clear is added it disappears again.
+        while (true) {
+            let choice = prompt("Main Menu \n 1. Add Employee\n2. Remove Employee\n3. Edit Employee\n4. Display Employees\n \nEnter Selection:");
+        
+        if (choice === "1" || choice === "2" || choice === "3" || choice === "4"){
+            this.handleChoice(choice);
+        } 
+        else if (choice !== "1" && choice !== "2" && choice !== "3" && choice !== "4" && choice !== "5"){
+            alert("Please select the options presented to you.");
         }
+        this.displayEmployees();
     }
+    }
+    
 
     handleChoice(choice) {
         if (choice === "1") {
@@ -70,10 +78,11 @@ class Main {
     // User Prompts & Edits
 
     addEmployee() {
-        let name = prompt("Enter employee name:");
-        let age = parseInt(prompt("Enter employee age:"));
-        let payRate = parseFloat(prompt("Enter employees' hourly pay rate:"));
-        let hours = parseInt(prompt("Enter hours per week:"));
+        let input = prompt("Add Employee Name, age, hours, pay rate [separate each by a comma]");
+        let [name, age, hours, payRate] = input.split(",").map(item => item.trim());
+        age = parseInt(age);
+        hours = parseInt(hours);
+        payRate = parseFloat(payRate);
 
         let newEmployee = hours < 40 ? new PartTime(name, age, payRate, hours) : new Manager(name, age, payRate);
         this.employees.push(newEmployee);
@@ -90,7 +99,7 @@ class Main {
 
     editEmployee() {
         let name = prompt("Enter employee name to edit:");
-        let employee = this.employees.filter(edit => edit.name === name);
+        let employee = this.employees.filter(edit => edit.name === name)[0];
         if (employee) {
             employee.payRate = parseFloat(prompt("Enter new pay rate:"));
             employee.calculatePay();
@@ -104,9 +113,9 @@ class Main {
 
     displayEmployees() {
         console.log("Shawn's Pizza Place");
-        console.log("ID\tName\tAge\tSalary\Hours\tPay\tFT/PT");
+        console.log("ID\tName\tAge\tSalary\tHours\tPay\tFT/PT");
         this.employees.forEach((emp, index) => {
-            console.log(`${index + 1}\t${emp.name}\t${emp.age}\t${emp.employeeSalary}\t${emp.hours || 40}\t${emp.payRate}\t${emp.employeeType}`);
+            console.log(`${index + 1}\t${emp.name}\t${emp.age}\t${emp.employeeSalary}\t ${emp.hours || 40}\t  ${emp.payRate}\t ${emp.employeeType}`);
         });
     }
 }
